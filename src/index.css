@@ -1,0 +1,78 @@
+@import "tailwindcss";
+@import "@fontsource/dm-sans/400.css";
+@import "@fontsource/dm-sans/500.css";
+@import "@fontsource/dm-sans/600.css";
+@import "@fontsource/dm-serif-display/400.css";
+
+@theme {
+  /* Paleta PriceCheck */
+  --color-primary: #1E2A38;
+  --color-accent: #1D4ED8;
+  --color-background: #F5F7FA;
+  --color-success: #22C55E;
+  --color-danger: #EF4444;
+  --color-warning: #F59E0B;
+
+  /* Fontes */
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "DM Serif Display", ui-serif, Georgia, serif;
+
+  /* Cores de categoria */
+  --color-cat-azeitonas: #1D4ED8;
+  --color-cat-champignon: #065F46;
+  --color-cat-macarrao: #92400E;
+  --color-cat-amendoim: #6D28D9;
+  --color-cat-canjica: #B91C1C;
+  --color-cat-pipoca: #7C3AED;
+  --color-cat-tapioca: #374151;
+  --color-cat-coco: #0369A1;
+  --color-cat-catchup: #B45309;
+  --color-cat-mostarda: #4D7C0F;
+  --color-cat-farofa: #9A3412;
+  --color-cat-farinha: #A16207;
+  --color-cat-trigo: #854D0E;
+  --color-cat-uva: #831843;
+  --color-cat-tempero: #0F766E;
+}
+
+/* shadcn/ui CSS variables */
+@layer base {
+  :root {
+    --background: 220 14% 96%;       /* #F5F7FA */
+    --foreground: 214 36% 17%;       /* #1E2A38 */
+    --card: 0 0% 100%;
+    --card-foreground: 214 36% 17%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 214 36% 17%;
+    --primary: 214 36% 17%;          /* #1E2A38 navy */
+    --primary-foreground: 0 0% 98%;
+    --secondary: 220 14% 90%;
+    --secondary-foreground: 214 36% 17%;
+    --muted: 220 14% 90%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 221 83% 53%;           /* #1D4ED8 blue */
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 84% 60%;        /* #EF4444 */
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 13% 86%;
+    --input: 220 13% 86%;
+    --ring: 221 83% 53%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    background-color: #F5F7FA;
+    color: hsl(var(--foreground));
+    font-family: var(--font-sans);
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-serif);
+  }
+}
