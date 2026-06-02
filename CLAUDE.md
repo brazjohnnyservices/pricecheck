@@ -8,8 +8,9 @@
 
 - **GitHub:** https://github.com/brazjohnnyservices/pricecheck.git
 - **Branch principal:** `main`
-- **Hospedagem:** Netlify (conectado ao GitHub, deploy automático no push)
-- **Variáveis de ambiente no Netlify:**
+- **Hospedagem:** Vercel (conectado ao GitHub, deploy automático no push)
+  - Migrado do Netlify em 2026-06-02 (Netlify atingiu limite de builds do free tier)
+- **Variáveis de ambiente no Vercel:**
   - `VITE_SUPABASE_URL`
   - `VITE_SUPABASE_ANON_KEY`
   - `VITE_SUPABASE_SERVICE_KEY`
@@ -31,11 +32,11 @@
 - **Frontend:** React 18 + Vite + TypeScript
 - **Estilo:** Tailwind CSS v4 (config via `@theme` em CSS, sem `tailwind.config.ts`) + shadcn/ui (Radix)
 - **Banco:** Supabase (Postgres + Auth)
-- **Hospedagem:** Netlify
+- **Hospedagem:** Vercel
 - **PDF:** jsPDF + jsPDF-autotable
 - **Excel import:** SheetJS (xlsx)
 - **Estado:** React Context + hooks (sem Redux)
-- **PWA:** vite-plugin-pwa (service worker autoUpdate, ícone SVG)
+- **PWA:** vite-plugin-pwa (service worker skipWaiting + clientsClaim, ícone SVG)
 - **IDE:** Claude Code no VS Code
 
 ---
@@ -48,7 +49,7 @@
 - **Success:** `#22C55E`
 - **Danger:** `#EF4444`
 - **Warning:** `#F59E0B`
-- **Fonts:** Inter (corpo) + Sora (títulos/headings)
+- **Fonts:** Inter (única fonte — corpo e títulos). Sora foi removida.
 - **Slogan:** "Pesquisa de preço de campo, sem planilha."
 
 Paleta de categorias:
@@ -170,6 +171,7 @@ Motivo: RLS desabilitado mas a anon key ainda bloqueia em algumas configs. Servi
 5. **Histórico:** todas as pesquisas ficam salvas com cascade delete (apagar cliente apaga pesquisas; apagar pesquisa apaga itens).
 6. **Comparativo:** DiffPill mostra % vs menor e % vs média dos concorrentes.
 7. **PDF:** landscape A4, colunas dinâmicas por concorrente, célula mais barata da linha destacada em verde.
+8. **Novos Clientes:** clientes com `created_at >= '2026-06-02T00:00:00.000Z'` (corte pós-importação inicial) OU adicionados na sessão atual via `newlyAddedIds` em `useClients`.
 
 ---
 
@@ -182,12 +184,13 @@ pricecheck/
 │   │   └── AuthContext.tsx          ← sessão Supabase Auth, useAuth hook
 │   ├── pages/
 │   │   ├── Login.tsx
-│   │   ├── ClientsPage.tsx          ← accordion por cidade + cadastro + exclusão
+│   │   ├── ClientsPage.tsx          ← home: abas Clientes/Produtos
+│   │   ├── ProductsPage.tsx         ← /produtos (rota standalone, conteúdo tb na home)
 │   │   ├── ResearchPage.tsx         ← pesquisa ativa + PDF + salvar
 │   │   ├── HistoryPage.tsx          ← histórico agrupado por cliente + excluir
 │   │   └── ImportPage.tsx           ← /admin: importar XLSX + configurar produtos
 │   ├── components/
-│   │   ├── Layout.tsx               ← header nav + logout
+│   │   ├── Layout.tsx               ← header nav (Início · Histórico · Admin · Sair) + logout
 │   │   ├── ClientCard.tsx           ← card com exclusão inline (2 cliques)
 │   │   ├── ClientList.tsx           ← grid responsivo de cards
 │   │   ├── ClientFormModal.tsx      ← modal de cadastro de novo cliente
@@ -195,10 +198,10 @@ pricecheck/
 │   │   ├── ConcorrenteBox.tsx       ← bloco nome+preço com remoção opcional
 │   │   ├── DiffPill.tsx             ← pill % vs menor / vs média
 │   │   ├── ProductSearchModal.tsx   ← modal multi-add de produtos (não fecha ao adicionar)
-│   │   ├── ResearchDetailModal.tsx  ← detalhe de pesquisa histórica + PDF + excluir
+│   │   ├── ResearchDetailModal.tsx  ← detalhe de pesquisa histórica + edição inline + PDF + excluir
 │   │   └── Toast.tsx                ← toast auto-dismiss 3s
 │   ├── hooks/
-│   │   ├── useClients.ts            ← lista + addClient + deleteClient
+│   │   ├── useClients.ts            ← lista + addClient + deleteClient + newlyAddedIds
 │   │   ├── useProducts.ts           ← lista todos os produtos
 │   │   ├── useResearch.ts           ← estado local da pesquisa + saveResearch
 │   │   └── useHistory.ts            ← histórico + fetchResearchDetail + deleteResearch
@@ -217,8 +220,9 @@ pricecheck/
 │   ├── seed_clientes.sql            ← 133 clientes
 │   └── seed_produtos.sql            ← 691 produtos
 ├── uploads/                         ← XLSXs originais (não versionados no prod)
-├── netlify.toml                     ← build + SPA redirect + Node 20
-├── vite.config.ts                   ← Vite + Tailwind + PWA
+├── vercel.json                      ← SPA redirect + no-cache para sw.js
+├── netlify.toml                     ← mantido como fallback (build + SPA redirect + Node 20)
+├── vite.config.ts                   ← Vite + Tailwind + PWA (skipWaiting + clientsClaim)
 ├── .env.local                       ← NÃO commitado (gitignore)
 └── package.json
 ```
@@ -230,11 +234,16 @@ pricecheck/
 ### 1. Login (`/login`)
 Email + senha via Supabase Auth. Redireciona para `/` se já logado.
 
-### 2. Clientes (`/`)
-- Accordion por cidade (fechado por padrão, abre ao clicar)
-- Busca por nome, razão social, bairro, cidade ou código → expande cidades automaticamente
+### 2. Home — Clientes (`/` — aba Clientes)
+- Grade de cards de cidades (4 por linha, Title Case), clicar abre painel com os clientes
+- Card especial **Novos clientes** (verde) — aparece quando há clientes adicionados desde 2026-06-02 ou na sessão
+- Busca por nome, razão social, bairro, cidade ou código
 - Botão "+ Novo cliente" → modal com formulário completo
-- Card com botão × (hover) → confirmação inline → exclusão (cascade)
+- Card de cliente com botão × → confirmação inline → exclusão (cascade)
+
+### 2b. Home — Produtos (`/` — aba Produtos)
+- Tabela de todos os produtos com busca, filtro por categoria e "Só principais"
+- Colunas: código, descrição, badge de categoria colorido, custo, venda sugerida, ★ principal
 
 ### 3. Pesquisa (`/pesquisa/:clientId`)
 - Header: nome do cliente + "← Trocar cliente"
@@ -249,6 +258,7 @@ Email + senha via Supabase Auth. Redireciona para `/` se já logado.
 - Filtros: busca por cliente + picker de mês
 - Lista agrupada por cliente (ordem: pesquisa mais recente primeiro)
 - Row → modal de detalhe: produtos, preços, concorrentes, DiffPill
+- Modal: botão **Editar** → edição inline de custo, venda e concorrentes por item → **Salvar alterações**
 - Modal: botão "Gerar PDF" + "Excluir" (2 cliques com confirmação)
 
 ### 5. Importação (`/admin`)
@@ -277,20 +287,30 @@ Email + senha via Supabase Auth. Redireciona para `/` se já logado.
 
 ---
 
+## Fixes críticos aplicados
+
+- **`formatDate`:** strings `"YYYY-MM-DD"` são parsadas como data local (não UTC) para evitar mostrar o dia anterior no fuso UTC-3
+- **Dois clientes Supabase:** `supabase` (anon, só auth) e `supabaseAdmin` (service key, todos os dados)
+- **`createClient<any>()`** nos dois clientes evita erro `RejectExcessProperties never` no Supabase v2.105
+- **Grants SQL:** rodar sempre que criar nova tabela nova
+- **SW `skipWaiting + clientsClaim`:** deploys ativam imediatamente sem esperar fechar abas
+- **No-cache para `sw.js`** em `vercel.json` e `netlify.toml`
+
+---
+
 ## Regras pro Claude Code
 
-1. **Ler o STATUS.md antes de qualquer task** — tem o estado atual detalhado.
-2. **Implemente sem pedir confirmação** (usuário liberou fluxo contínuo).
-3. **Não altere rotas ou DB fora do escopo da task.**
-4. **Toast/loading em toda operação assíncrona.**
-5. **Datas sempre em pt-BR** (`formatDate` em `utils.ts`).
-6. **Não instale dependências sem avisar.**
-7. **Sem testes automatizados nesta fase.**
-8. **Componentes pequenos e isolados** (1 arquivo = 1 responsabilidade).
-9. **TypeScript estrito.** Tipos do banco em `types/db.ts`. Usar `createClient<any>()` no Supabase.
-10. **Sempre usar `supabaseAdmin`** para leitura e escrita de dados (nunca `supabase` anon para dados).
-11. **Após implementar, rodar `npx tsc --noEmit`** para confirmar zero erros de tipo.
-12. **Commitar e fazer push** ao final de cada conjunto de mudanças significativas.
+1. **Implemente sem pedir confirmação** (usuário liberou fluxo contínuo).
+2. **Não altere rotas ou DB fora do escopo da task.**
+3. **Toast/loading em toda operação assíncrona.**
+4. **Datas sempre em pt-BR** (`formatDate` em `utils.ts`).
+5. **Não instale dependências sem avisar.**
+6. **Sem testes automatizados nesta fase.**
+7. **Componentes pequenos e isolados** (1 arquivo = 1 responsabilidade).
+8. **TypeScript estrito.** Tipos do banco em `types/db.ts`. Usar `createClient<any>()` no Supabase.
+9. **Sempre usar `supabaseAdmin`** para leitura e escrita de dados (nunca `supabase` anon para dados).
+10. **Após implementar, rodar `npx tsc --noEmit`** para confirmar zero erros de tipo.
+11. **Commitar e fazer push** ao final de cada conjunto de mudanças significativas.
 
 ---
 
@@ -303,5 +323,7 @@ Email + senha via Supabase Auth. Redireciona para `/` se já logado.
 - Histórico completo com cascade delete
 - 1 usuário, sem multi-tenant, RLS desabilitado
 - Custo não aparece no PDF (só venda sugerida)
-- Accordion por cidade na tela de clientes (não sidebar)
+- Grade de cards por cidade na home (não accordion nem sidebar)
 - Modal de produto não fecha ao adicionar (multi-add)
+- Fonte única Inter (Sora removida em 2026-06-02)
+- Hospedagem Vercel (Netlify descartado por limite de builds)
