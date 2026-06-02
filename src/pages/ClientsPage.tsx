@@ -52,8 +52,10 @@ function ClientesTab() {
   const [selectedCity, setSelectedCity] = useState<string | null>(null)
   const [showForm, setShowForm] = useState(false)
 
+  // Clientes adicionados a partir de 02/06/2026 (corte fixo pós-importação inicial)
+  const BASELINE = '2026-06-02T00:00:00.000Z'
   const novos = useMemo(
-    () => clients.filter((c) => newlyAddedIds.has(c.id)),
+    () => clients.filter((c) => c.created_at >= BASELINE || newlyAddedIds.has(c.id)),
     [clients, newlyAddedIds]
   )
 
