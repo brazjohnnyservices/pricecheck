@@ -9,7 +9,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-background font-sans">
       <header className="bg-primary text-white px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Link to="/" className="font-serif text-xl tracking-wide hover:opacity-80 transition-opacity">
+          <Link to="/" className="text-xl font-bold tracking-tight hover:opacity-80 transition-opacity">
             PriceCheck
           </Link>
           <span className="text-xs text-white/60 hidden sm:block">
@@ -25,6 +25,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             }`}
           >
             Histórico
+          </Link>
+          <Link
+            to="/produtos"
+            className={`text-sm transition-colors ${
+              pathname === '/produtos' ? 'text-white font-medium' : 'text-white/70 hover:text-white'
+            }`}
+          >
+            Produtos
           </Link>
           <Link
             to="/admin"

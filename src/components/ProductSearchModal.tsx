@@ -42,7 +42,7 @@ export default function ProductSearchModal({ addedIds, onAdd, onClose }: Props) 
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg flex flex-col max-h-[80vh]">
         {/* Header */}
         <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-gray-100">
-          <h3 className="font-serif text-lg text-primary">Adicionar produto</h3>
+          <h3 className="text-lg font-semibold text-primary">Adicionar produto</h3>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 text-xl leading-none"

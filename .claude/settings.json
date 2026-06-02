@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git push *)",
+      "Bash(powershell -Command \"\\(Get-Content src\\\\pages\\\\ClientsPage.tsx\\) -replace 'font-serif text-2xl text-primary\\\\\">Clientes', 'text-2xl font-semibold text-primary\\\\\">Clientes' | Set-Content src\\\\pages\\\\ClientsPage.tsx\")",
+      "Bash(powershell -Command \"\\(Get-Content src\\\\pages\\\\HistoryPage.tsx\\) -replace 'font-serif text-2xl text-primary', 'text-2xl font-semibold text-primary' | Set-Content src\\\\pages\\\\HistoryPage.tsx\")",
+      "Bash(powershell -Command \"\\(Get-Content src\\\\components\\\\ClientFormModal.tsx\\) -replace 'font-serif text-lg text-primary', 'text-lg font-semibold text-primary' | Set-Content src\\\\components\\\\ClientFormModal.tsx\")",
+      "Bash(powershell -Command \"\\(Get-Content src\\\\components\\\\ProductSearchModal.tsx\\) -replace 'font-serif text-lg text-primary', 'text-lg font-semibold text-primary' | Set-Content src\\\\components\\\\ProductSearchModal.tsx\")",
+      "Bash(powershell -Command \"\\(Get-Content src\\\\pages\\\\ImportPage.tsx\\) -replace 'font-serif text-2xl text-primary', 'text-2xl font-semibold text-primary' | Set-Content src\\\\pages\\\\ImportPage.tsx\")"
+    ]
+  }
+}

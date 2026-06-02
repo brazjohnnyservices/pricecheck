@@ -21,7 +21,7 @@ export default function Login() {
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
       <div className="w-full max-w-sm space-y-6">
         <div className="text-center space-y-1">
-          <h1 className="font-serif text-3xl text-primary">PriceCheck</h1>
+          <h1 className="text-3xl font-bold text-primary tracking-tight">PriceCheck</h1>
           <p className="text-sm text-gray-500">Pesquisa de preço de campo, sem planilha.</p>
         </div>
 

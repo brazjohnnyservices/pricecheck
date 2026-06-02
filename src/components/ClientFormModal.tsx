@@ -51,7 +51,7 @@ export default function ClientFormModal({ onSave, onClose }: Props) {
     >
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg">
         <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-gray-100">
-          <h3 className="font-serif text-lg text-primary">Novo cliente</h3>
+          <h3 className="text-lg font-semibold text-primary">Novo cliente</h3>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl leading-none">×</button>
         </div>
 

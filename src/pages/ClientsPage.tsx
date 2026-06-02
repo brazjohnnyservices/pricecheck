@@ -47,7 +47,7 @@ export default function ClientsPage() {
     <div className="max-w-7xl mx-auto space-y-5">
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-4">
-          <h2 className="font-serif text-2xl text-primary">Clientes</h2>
+          <h2 className="text-2xl font-semibold text-primary">Clientes</h2>
           <span className="text-sm text-gray-400">
             {loading ? '…' : `${filtrados.length} de ${clients.length}`}
           </span>

@@ -298,7 +298,7 @@ export default function ImportPage() {
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">
-      <h2 className="font-serif text-2xl text-primary">Admin</h2>
+      <h2 className="text-2xl font-semibold text-primary">Admin</h2>
 
       {/* Tabs */}
       <div className="flex gap-1 bg-gray-100 p-1 rounded-lg w-fit">

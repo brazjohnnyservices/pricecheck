@@ -12,7 +12,7 @@ export default function HistoryPage() {
 
   return (
     <div className="max-w-3xl mx-auto space-y-5">
-      <h2 className="font-serif text-2xl text-primary">Histórico de pesquisas</h2>
+      <h2 className="text-2xl font-semibold text-primary">Histórico de pesquisas</h2>
 
       {/* Filtros */}
       <div className="flex gap-3 flex-wrap">

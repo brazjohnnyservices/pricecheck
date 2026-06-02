@@ -172,7 +172,7 @@ export default function ResearchDetailModal({ research, onClose, onDelete }: Pro
         {/* Header */}
         <div className="flex items-start justify-between px-5 pt-5 pb-3 border-b border-gray-100">
           <div>
-            <h3 className="font-serif text-lg text-primary">{research.client_nome}</h3>
+            <h3 className="text-lg font-semibold text-primary">{research.client_nome}</h3>
             {research.client_razao && research.client_razao !== research.client_nome && (
               <p className="text-xs text-gray-400">{research.client_razao}</p>
             )}

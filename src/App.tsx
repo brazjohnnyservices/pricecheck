@@ -6,6 +6,7 @@ import ClientsPage from '@/pages/ClientsPage'
 import ResearchPage from '@/pages/ResearchPage'
 import ImportPage from '@/pages/ImportPage'
 import HistoryPage from '@/pages/HistoryPage'
+import ProductsPage from '@/pages/ProductsPage'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth()
@@ -61,6 +62,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <HistoryPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/produtos"
+        element={
+          <ProtectedRoute>
+            <ProductsPage />
           </ProtectedRoute>
         }
       />

@@ -79,7 +79,7 @@ export default function ResearchPage() {
             <p className="text-sm text-gray-400">Carregando…</p>
           ) : (
             <>
-              <h2 className="font-serif text-2xl text-primary">
+              <h2 className="text-2xl font-semibold text-primary">
                 {client?.nome_fantasia || client?.razao_social}
               </h2>
               {client?.nome_fantasia && (
