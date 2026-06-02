@@ -19,6 +19,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
         <nav className="flex items-center gap-4">
           <Link
+            to="/"
+            className={`text-sm transition-colors ${
+              pathname === '/' ? 'text-white font-medium' : 'text-white/70 hover:text-white'
+            }`}
+          >
+            Início
+          </Link>
+          <Link
             to="/historico"
             className={`text-sm transition-colors ${
               pathname === '/historico' ? 'text-white font-medium' : 'text-white/70 hover:text-white'
