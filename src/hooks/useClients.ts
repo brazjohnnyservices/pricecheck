@@ -6,6 +6,7 @@ export function useClients() {
   const [clients, setClients] = useState<Client[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [newlyAddedIds, setNewlyAddedIds] = useState<Set<number>>(new Set())
 
   useEffect(() => {
     supabase
@@ -35,6 +36,7 @@ export function useClients() {
           )
         )
       )
+      setNewlyAddedIds((prev) => new Set([...prev, inserted.id]))
     }
     return { error: null }
   }
@@ -46,5 +48,5 @@ export function useClients() {
     return { error: null }
   }
 
-  return { clients, loading, error, addClient, deleteClient }
+  return { clients, loading, error, addClient, deleteClient, newlyAddedIds }
 }
