@@ -27,14 +27,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             Histórico
           </Link>
           <Link
-            to="/produtos"
-            className={`text-sm transition-colors ${
-              pathname === '/produtos' ? 'text-white font-medium' : 'text-white/70 hover:text-white'
-            }`}
-          >
-            Produtos
-          </Link>
-          <Link
             to="/admin"
             className={`text-sm transition-colors ${
               pathname === '/admin' ? 'text-white font-medium' : 'text-white/70 hover:text-white'
